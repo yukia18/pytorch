@@ -1,0 +1,8 @@
+.python-version
+.vscode/
+dcgan/__pycache__/
+dcgan/data/
+dcgan/log/
+infogan/.vscode/
+infogan/__pycache__/
+infogan/data/
