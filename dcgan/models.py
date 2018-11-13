@@ -9,7 +9,7 @@ class Generator(nn.Module):
         self.conv_block = nn.Sequential(
             nn.ConvTranspose2d(128, 64, 5, 2, padding=2, output_padding=1),
             nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
+            nn.ReLU(True),
             nn.ConvTranspose2d(64, 1, 5, 2, padding=2, output_padding=1),
             nn.Tanh()
         )

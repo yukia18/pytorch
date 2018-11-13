@@ -5,13 +5,18 @@ from torchvision import datasets, transforms
 import torchvision
 from torch.utils.data import DataLoader
 from torchsummary import summary
-from torch.autograd import Variable
 import torch.nn as nn
 import numpy as np
 import os
 
 
-def main(batch_size=100, noise_dim=100, epochs=300, device='cpu'):
+def main(batch_size=100, noise_dim=100, epochs=300):
+    if torch.cuda.is_available():
+        device = 'cuda'
+    else:
+        device = 'cpu'
+    device = torch.device(device)
+
     dataloader = DataLoader(
         datasets.MNIST('./data/mnist', train=True, download=True,
         transform=transforms.Compose([
@@ -38,45 +43,67 @@ def main(batch_size=100, noise_dim=100, epochs=300, device='cpu'):
     optimizerG = torch.optim.Adam([{'params': generator.parameters()},], lr=0.0002, betas=(0.5, 0.999))
     optimizerD = torch.optim.Adam([{'params': discriminator.parameters()},], lr=0.0002, betas=(0.5, 0.999))
 
+    loss_Ds = []
+    loss_Gs = []
+
     for epoch in range(epochs):
         for i, (imgs, _) in enumerate(dataloader):
-            imgs = imgs.to(device)
+            imgs = imgs.to(device, dtype=torch.float32)
 
-            discriminator.zero_grad()
+            real = torch.ones((batch_size, 1), dtype=torch.float32, device=device)
+            fake = torch.zeros((batch_size, 1), dtype=torch.float32, device=device)
 
-            real = torch.Tensor(batch_size, 1).fill_(1.0).to(device)
-            fake = torch.Tensor(batch_size, 1).fill_(0.0).to(device)
+            # train D, real
+            optimizerD.zero_grad()
 
             a_real = discriminator(imgs)
             loss_real = criterion(a_real, real)
-            loss_real.backward()
 
-            noise = torch.randn(batch_size, noise_dim).to(device)
+            # train D, fake
+            noise = torch.randn((batch_size, noise_dim), dtype=torch.float32, device=device)
+
             gen_imgs = generator(noise)
             a_fake = discriminator(gen_imgs.detach())
             loss_fake = criterion(a_fake, fake)
-            loss_fake.backward()
 
+            # update D
             loss_D = loss_real + loss_fake
+            loss_D.backward()
             optimizerD.step()
 
-            generator.zero_grad()
-            a_trick = discriminator(gen_imgs)
+            # train G
+            optimizerG.zero_grad()
+
+            noise = torch.randn((batch_size, noise_dim), dtype=torch.float32, device=device)
+
+            trick_imgs = generator(noise)
+            a_trick = discriminator(trick_imgs)
             loss_G = criterion(a_trick, real)
+
+            # update G
             loss_G.backward()
             optimizerG.step()
 
+            loss_Ds.append(loss_D.item())
+            loss_Gs.append(loss_G.item())
+
             if i % 100 == 0:
                 print('Epoch/Iter:{0:4}/{1:4}, loss_D: {2:.3f}, loss_G: {3:.3f}'.format(
-                    epoch, i, loss_D.data.numpy(), loss_G.data.numpy())
-                )
+                    epoch, i, loss_Ds[-1], loss_Gs[-1],
+                ))
+        
+        torch.save(generator.state_dict(), './log/generator_epoch{:04}.pth'.format(epoch))
+        torch.save(discriminator.state_dict(), './log/discriminator_epoch{:04}.pth'.format(epoch))
 
         gen_imgs = generator(fixed_noise)
-        torchvision.utils.save_image(gen_imgs.detach(), './log/generated_image_epoch{:4}.png'.format(epoch), normalize=True)
-        torch.save(generator.state_dict(), './log/generator_epoch{:4}.pth'.format(epoch))
-        torch.save(discriminator.state_dict(), './log/discriminator_epoch{:4}.pth'.format(epoch))
+        torchvision.utils.save_image(gen_imgs.detach(), './log/image_epoch{:04}.png'.format(epoch), normalize=True)
+    
+    plt.plot(loss_Ds, label='Discriminator')
+    plt.plot(loss_Gs, label='Generator')
+    plt.legend()
+    plt.savefig('./log/plot_loss_through_iterations.png')
 
 
 if __name__ == '__main__':
     os.makedirs('./log', exist_ok=True)
-    main(device='cuda:0')
+    main()
