@@ -10,7 +10,7 @@ import numpy as np
 import os
 
 
-def main(batch_size=100, noise_dim=100, epochs=300):
+def main(batch_size=100, noise_dim=100, epochs=100):
     if torch.cuda.is_available():
         device = 'cuda'
         print('GPU MODE')
