@@ -42,8 +42,8 @@ def main(batch_size=100, noise_dim=100, epochs=300):
 
     fixed_noise = torch.randn(batch_size, noise_dim, device=device)
 
-    optimizerG = torch.optim.Adam([{'params': generator.parameters()},], lr=0.0002, betas=(0.5, 0.999))
-    optimizerD = torch.optim.Adam([{'params': discriminator.parameters()},], lr=0.0002, betas=(0.5, 0.999))
+    optimizerG = torch.optim.Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.999))
+    optimizerD = torch.optim.Adam(discriminator.parameters(), lr=0.0002, betas=(0.5, 0.999))
 
     loss_Ds = []
     loss_Gs = []
