@@ -8,6 +8,7 @@ from torchsummary import summary
 import torch.nn as nn
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 
 def main(batch_size=100, noise_dim=100, epochs=100):
