@@ -29,15 +29,14 @@ class Discriminator(nn.Module):
             nn.Conv2d(1, 64, 5, stride=2, padding=2),
             nn.BatchNorm2d(64),
             nn.LeakyReLU(0.2),
-            nn.Dropout2d(0.5),
+            nn.Dropout2d(0.2),
             nn.Conv2d(64, 128, 5, stride=2, padding=2),
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
-            nn.Dropout2d(0.5),
-            nn.AvgPool2d(7),
+            nn.Dropout2d(0.2),
         )
         self.fc_block = nn.Sequential(
-            nn.Linear(128, 1),
+            nn.Linear(6272, 1),
             nn.Sigmoid()
         )
     
