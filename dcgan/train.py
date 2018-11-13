@@ -11,7 +11,7 @@ import os
 import matplotlib.pyplot as plt
 
 
-def main(batch_size=100, noise_dim=100, epochs=100):
+def main(batch_size=100, noise_dim=100, epochs=50):
     if torch.cuda.is_available():
         device = 'cuda'
         print('GPU MODE')
