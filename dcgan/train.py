@@ -13,8 +13,10 @@ import os
 def main(batch_size=100, noise_dim=100, epochs=300):
     if torch.cuda.is_available():
         device = 'cuda'
+        print('GPU MODE')
     else:
         device = 'cpu'
+        print('CPU MODE')
     device = torch.device(device)
 
     dataloader = DataLoader(
