@@ -99,7 +99,7 @@ def main(batch_size=100, noise_dim=100, epochs=100):
         torch.save(discriminator.state_dict(), './log/discriminator_epoch{:04}.pth'.format(epoch))
 
         gen_imgs = generator(fixed_noise)
-        torchvision.utils.save_image(gen_imgs.detach(), './log/image_epoch{:04}.png'.format(epoch), normalize=True)
+        torchvision.utils.save_image(gen_imgs.detach(), './log/image_epoch{:04}.png'.format(epoch), normalize=True, nrow=10)
     
     plt.plot(loss_Ds, label='Discriminator')
     plt.plot(loss_Gs, label='Generator')
