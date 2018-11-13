@@ -52,8 +52,8 @@ def main(batch_size=100, noise_dim=100, epochs=300):
         for i, (imgs, _) in enumerate(dataloader):
             imgs = imgs.to(device, dtype=torch.float32)
 
-            real = torch.ones((batch_size, 1), dtype=torch.float32, device=device, requires_grad=True)
-            fake = torch.zeros((batch_size, 1), dtype=torch.float32, device=device, requires_grad=True)
+            real = torch.ones((batch_size, 1), dtype=torch.float32, device=device)
+            fake = torch.zeros((batch_size, 1), dtype=torch.float32, device=device)
 
             # train D, real
             optimizerD.zero_grad()
