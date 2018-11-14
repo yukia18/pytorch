@@ -32,7 +32,7 @@ class G(nn.Module):
 
 class FE(nn.Module):
     def __init__(self, ):
-        super(FrontEnd, self).__init__()
+        super(FE, self).__init__()
 
         self.conv_blocks = nn.Sequential(
             nn.Conv2d(1, 32, 5, stride=2, padding=2),
