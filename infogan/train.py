@@ -129,9 +129,9 @@ def main():
         fixed_gen_imgs = g(fixed_noise, fixed_categorical)
         torchvision.utils.save_image(fixed_gen_imgs.detach(), './log/image_epoch{:04}.png'.format(epoch), normalize=True, nrow=10)
     
-    plt.plot(loss_Ds, label='D')
-    plt.plot(loss_Gs, label='G')
-    plt.plot(loss_Qs, label='Q')
+    plt.plot(loss_Ds, label='D', alpha=0.5)
+    plt.plot(loss_Gs, label='G', alpha=0.5)
+    plt.plot(loss_Qs, label='Q', alpha=0.5)
     plt.legend()
     plt.savefig('./log/plot_loss_through_iterations.png')
 
