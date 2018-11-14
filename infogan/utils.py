@@ -1,6 +1,6 @@
 import torch
-from torch.autograd import Variable
 import numpy as np
+import constants
 
 
 def weights_init_normal(m):
@@ -12,9 +12,9 @@ def weights_init_normal(m):
         torch.nn.init.constant_(m.bias.data, 0.0)
 
 
-def to_categorical(y, num_columns):
-    """Returns one-hot encoded Variable"""
-    y_cat = np.zeros((y.shape[0], num_columns))
-    y_cat[range(y.shape[0]), y] = 1.
+def to_categorical(y):
+    categorical_dim = constants.CATEGORICAL_DIM
+    y_cat = np.zeros((y.shape[0], categorical_dim))
+    y_cat[range(y.shape[0]), y] = 1.0
 
-    return Variable(torch.FloatTensor(y_cat))
+    return torch.from_numpy(y_cat)
