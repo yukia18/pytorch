@@ -39,14 +39,14 @@ class FE(nn.Module):
         super(FE, self).__init__()
 
         self.conv_blocks = nn.Sequential(
-            nn.Conv2d(1, 64, 4, stride=2),
+            nn.Conv2d(1, 64, 4, stride=2, padding=1),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(64, 128, 4, stride=2),
+            nn.Conv2d(64, 128, 4, stride=2, padding=1),
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.2),
         )
         self.fc_blocks = nn.Sequential(
-            nn.Linear(128*3*3, 1024),
+            nn.Linear(128*7*7, 1024),
             nn.BatchNorm1d(1024),
             nn.LeakyReLU(0.2),
         )
