@@ -133,7 +133,7 @@ def main():
     plt.plot(loss_Gs, label='G')
     plt.plot(loss_Qs, label='Q')
     plt.legend()
-    plt.savefig('./model/sagan/plot_loss_through_iterations.png')
+    plt.savefig('./log/plot_loss_through_iterations.png')
 
 
 if __name__ == '__main__':
