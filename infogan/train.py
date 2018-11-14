@@ -31,7 +31,7 @@ def main():
     d = D().to(device)
     q = Q().to(device)
 
-    summary(g, (noise_dim+categorical_dim,))
+    summary(g, [(noise_dim,), (categorical_dim,)])
     summary(fe, (1, 28, 28))
     summary(d, (1024,))
     summary(q, (1024,))
