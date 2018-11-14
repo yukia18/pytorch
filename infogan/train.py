@@ -7,6 +7,8 @@ import os
 import numpy as np
 from torchsummary import summary
 import constants
+import torchvision
+import matplotlib.pyplot as plt
 
 
 def main():
